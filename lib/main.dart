@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/MyAppTheme.dart';
 
 import 'home/HomeScreen.dart';
 
@@ -14,6 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: MyAppTheme.lightMode,
       initialRoute: HomeScreen.screenRoute,
       routes: {
         HomeScreen.screenRoute: (context) => HomeScreen(),
