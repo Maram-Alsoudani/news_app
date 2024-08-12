@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-
 import '../AppColors.dart';
 import 'Category.dart';
 import 'CategoryItem.dart';
 
 class CategoryFragment extends StatelessWidget {
+  Function(Category) onCategoryClick;
+
+  CategoryFragment({
+    required this.onCategoryClick,
+  });
+
   @override
   Widget build(BuildContext context) {
     List<Category> categoriesList = [
@@ -62,9 +67,14 @@ class CategoryFragment extends StatelessWidget {
                     mainAxisSpacing: 10),
                 itemCount: categoriesList.length,
                 itemBuilder: (context, index) {
-                  return CategoryItem(
-                    category: categoriesList[index],
-                    index: index,
+                  return InkWell(
+                    onTap: () {
+                      onCategoryClick(categoriesList[index]);
+                    },
+                    child: CategoryItem(
+                      category: categoriesList[index],
+                      index: index,
+                    ),
                   );
                 }),
           )

@@ -9,9 +9,9 @@ import 'ApiConstants.dart';
 class ApiManager {
   static const String apiKey = "6022e0680e354bdc95efdae1289aeeff";
 
-  static Future<SourceResponse> getSources() async {
-    Uri url = Uri.https(
-        ApiConstants.baseUrl, ApiConstants.sourceApi, {"apiKey": apiKey});
+  static Future<SourceResponse> getSources(String categoryId) async {
+    Uri url = Uri.https(ApiConstants.baseUrl, ApiConstants.sourceApi,
+        {"apiKey": apiKey, "category": categoryId});
     try {
       var response = await http.get(url);
       var responseBody = response.body;

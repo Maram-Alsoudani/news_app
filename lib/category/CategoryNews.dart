@@ -4,9 +4,12 @@ import '../Api/ApiManager.dart';
 import '../ErrorScreen.dart';
 import '../home/tabs/TabWidget.dart';
 import '../models/SourceResponse.dart';
+import 'Category.dart';
 
 class CategoryNews extends StatefulWidget {
-  const CategoryNews({super.key});
+  Category category;
+
+  CategoryNews({required this.category});
 
   @override
   State<CategoryNews> createState() => _CategoryNewsState();
@@ -16,7 +19,7 @@ class _CategoryNewsState extends State<CategoryNews> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<SourceResponse>(
-      future: ApiManager.getSources(),
+      future: ApiManager.getSources(widget.category.id),
       builder: (context, snapShot) {
         // loading
         if (snapShot.connectionState == ConnectionState.waiting) {
@@ -32,7 +35,7 @@ class _CategoryNewsState extends State<CategoryNews> {
             child: ErrorScreen(
                 msg: "Something went wrong, Please try again.",
                 onClicked: () {
-                  ApiManager.getSources();
+                  ApiManager.getSources(widget.category.id);
                   setState(() {});
                 }),
           );
@@ -44,7 +47,7 @@ class _CategoryNewsState extends State<CategoryNews> {
             child: ErrorScreen(
                 msg: snapShot.data!.message!,
                 onClicked: () {
-                  ApiManager.getSources();
+                  ApiManager.getSources(widget.category.id);
                   setState(() {});
                 }),
           );
