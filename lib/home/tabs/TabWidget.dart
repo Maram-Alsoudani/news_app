@@ -1,7 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/home/tabs/TabItem.dart';
+
 import '../../models/SourceResponse.dart';
+import '../news/NewsWidget.dart';
 
 class TabWidget extends StatefulWidget {
   static const String screenRoute = "tab_widget";
@@ -46,6 +47,7 @@ class _TabWidgetState extends State<TabWidget> {
               }).toList(),
             ),
           ),
+          Expanded(child: NewsWidget(source: widget.sourcesList[selectedIndex]))
         ],
       ),
     );
