@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/DrawerWidget.dart';
 import 'package:news_app/category/CategoryFragment.dart';
+import 'package:news_app/category/CategoryNews.dart';
 
 import '../AppColors.dart';
+import '../category/Category.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String screenRoute = "home_screen";
@@ -14,7 +16,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    // final categoryName="news";
     return Stack(children: [
       Container(
         color: AppColors.white,
@@ -44,9 +45,20 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }),
         ),
-        body: CategoryFragment(),
+        body: selectedCategory == null
+            ? CategoryFragment(onCategoryClick: onCategoryClick)
+            : CategoryNews(category: selectedCategory!),
         drawer: Drawerwidget(),
       )
     ]);
+  }
+
+  Category? selectedCategory;
+
+  void onCategoryClick(Category newCategory) {
+    print("Category clicked: ${newCategory.name}");
+    selectedCategory = newCategory;
+
+    setState(() {});
   }
 }
