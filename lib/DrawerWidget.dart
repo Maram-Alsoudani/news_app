@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 import 'AppColors.dart';
 
 class Drawerwidget extends StatelessWidget {
+  Function onSideMenuItemClick;
+  static const int categories = 1;
+  static const int settings = 2;
+
+  Drawerwidget({required this.onSideMenuItemClick});
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -27,7 +32,9 @@ class Drawerwidget extends StatelessWidget {
                     .titleLarge!
                     .copyWith(color: AppColors.black),
               ),
-              onTap: () {}),
+              onTap: () {
+                onSideMenuItemClick(categories);
+              }),
           ListTile(
             leading: Icon(Icons.settings, color: AppColors.black),
             title: Text(
@@ -37,7 +44,9 @@ class Drawerwidget extends StatelessWidget {
                   .titleLarge!
                   .copyWith(color: AppColors.black),
             ),
-            onTap: () {},
+            onTap: () {
+              onSideMenuItemClick(settings);
+            },
           )
         ],
       ),

@@ -4,6 +4,7 @@ import 'package:news_app/category/CategoryFragment.dart';
 import 'package:news_app/category/CategoryNews.dart';
 
 import '../AppColors.dart';
+import '../SettingsTab.dart';
 import '../category/Category.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -29,7 +30,11 @@ class _HomeScreenState extends State<HomeScreen> {
       Scaffold(
         appBar: AppBar(
           title: Text(
-            "News App",
+            selectedMenuSideItem == Drawerwidget.settings
+                ? "Settings"
+                : selectedCategory == null
+                    ? "News App"
+                    : "${selectedCategory!.name}",
             style: Theme.of(context).textTheme.titleLarge,
           ),
           centerTitle: true,
@@ -45,10 +50,14 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }),
         ),
-        body: selectedCategory == null
-            ? CategoryFragment(onCategoryClick: onCategoryClick)
-            : CategoryNews(category: selectedCategory!),
-        drawer: Drawerwidget(),
+        body: selectedMenuSideItem == Drawerwidget.settings
+            ? SettingsTab()
+            : selectedCategory == null
+                ? CategoryFragment(onCategoryClick: onCategoryClick)
+                : CategoryNews(category: selectedCategory!),
+        drawer: Drawerwidget(
+          onSideMenuItemClick: onMenuSideItemClick,
+        ),
       )
     ]);
   }
@@ -59,6 +68,15 @@ class _HomeScreenState extends State<HomeScreen> {
     print("Category clicked: ${newCategory.name}");
     selectedCategory = newCategory;
 
+    setState(() {});
+  }
+
+  int selectedMenuSideItem = Drawerwidget.categories;
+
+  void onMenuSideItemClick(int newSelectedMenuSideItem) {
+    selectedMenuSideItem = newSelectedMenuSideItem;
+    selectedCategory = null;
+    Navigator.pop(context);
     setState(() {});
   }
 }
