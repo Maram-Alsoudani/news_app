@@ -8,8 +8,8 @@ class MyAppTheme {
           color: Colors.green,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20)))),
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30)))),
       scaffoldBackgroundColor: Colors.transparent,
       textTheme: TextTheme(
           titleLarge: TextStyle(
