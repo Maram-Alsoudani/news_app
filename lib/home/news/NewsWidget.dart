@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/Api/ApiManager.dart';
 import 'package:news_app/home/news/NewsItem.dart';
+import 'package:provider/provider.dart';
 
 import '../../AppColors.dart';
 import '../../ErrorScreen.dart';
 import '../../models/SourceResponse.dart';
+import '../../providers/LanguageProvider.dart';
 
 class NewsWidget extends StatefulWidget {
   Source source;
@@ -18,8 +20,10 @@ class NewsWidget extends StatefulWidget {
 class _NewsWidgetState extends State<NewsWidget> {
   @override
   Widget build(BuildContext context) {
+    final language = Provider.of<LanguageProvider>(context).currentLanguage;
+
     return FutureBuilder(
-        future: ApiManager.getNewsBySourceId(widget.source.id ?? ""),
+        future: ApiManager.getNewsBySourceId(widget.source.id ?? "", language),
         builder: (context, snapShot) {
           //loading
           if (snapShot.connectionState == ConnectionState.waiting) {
@@ -35,7 +39,8 @@ class _NewsWidgetState extends State<NewsWidget> {
               child: ErrorScreen(
                   msg: "Something went wrong, Please try again.",
                   onClicked: () {
-                    ApiManager.getNewsBySourceId(widget.source.id ?? "");
+                    ApiManager.getNewsBySourceId(
+                        widget.source.id ?? "", language);
                     setState(() {});
                   }),
             );
@@ -47,7 +52,8 @@ class _NewsWidgetState extends State<NewsWidget> {
               child: ErrorScreen(
                   msg: snapShot.data!.message!,
                   onClicked: () {
-                    ApiManager.getNewsBySourceId(widget.source.id ?? "");
+                    ApiManager.getNewsBySourceId(
+                        widget.source.id ?? "", language);
                     setState(() {});
                   }),
             );
@@ -57,6 +63,7 @@ class _NewsWidgetState extends State<NewsWidget> {
           return ListView.builder(
               itemBuilder: (context, index) {
                 return NewsItem(news: newsList[index]);
+                print(newsList[index].description);
               },
               itemCount: newsList.length);
         });

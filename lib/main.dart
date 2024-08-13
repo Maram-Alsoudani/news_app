@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/MyAppTheme.dart';
+import 'package:news_app/providers/LanguageProvider.dart';
+import 'package:provider/provider.dart';
 
 import 'home/HomeScreen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => LanguageProvider(),
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
