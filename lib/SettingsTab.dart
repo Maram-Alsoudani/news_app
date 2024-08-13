@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/providers/LanguageProvider.dart';
+import 'package:provider/provider.dart';
 
 import 'AppColors.dart';
 
@@ -8,10 +10,11 @@ class SettingsTab extends StatefulWidget {
 }
 
 class _SettingsTabState extends State<SettingsTab> {
-  String? selectedLanguage = "English";
-
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<LanguageProvider>(context);
+    String selectedLanguage = provider.currentLanguage;
+
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -46,7 +49,22 @@ class _SettingsTabState extends State<SettingsTab> {
                 ),
               ),
             ),
-            items: ["English", "Arabic"].map((String language) {
+            items: [
+              "ar",
+              "en",
+              "de",
+              "es",
+              "fr",
+              "he",
+              "it",
+              "nl",
+              "no",
+              "pt",
+              "ru",
+              "sv",
+              "ud",
+              "zh"
+            ].map((String language) {
               return DropdownMenuItem(
                   value: language,
                   child: Text(
@@ -61,7 +79,7 @@ class _SettingsTabState extends State<SettingsTab> {
             }).toList(),
             onChanged: (String? newValue) {
               setState(() {
-                selectedLanguage = newValue;
+                provider.setLanguage(newValue!);
               });
             },
           )

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/providers/LanguageProvider.dart';
+import 'package:provider/provider.dart';
 
 import '../Api/ApiManager.dart';
 import '../ErrorScreen.dart';
@@ -18,6 +20,7 @@ class CategoryNews extends StatefulWidget {
 class _CategoryNewsState extends State<CategoryNews> {
   @override
   Widget build(BuildContext context) {
+    var language = Provider.of<LanguageProvider>(context).currentLanguage;
     return FutureBuilder<SourceResponse>(
       future: ApiManager.getSources(widget.category.id),
       builder: (context, snapShot) {

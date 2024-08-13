@@ -15,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String language = 'English';
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
@@ -78,5 +79,11 @@ class _HomeScreenState extends State<HomeScreen> {
     selectedCategory = null;
     Navigator.pop(context);
     setState(() {});
+  }
+
+  onLanguageChange(String newLanguage) {
+    setState(() {
+      language = newLanguage;
+    });
   }
 }
