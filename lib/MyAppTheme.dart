@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'AppColors.dart';
 
@@ -16,9 +17,11 @@ class MyAppTheme {
               fontSize: 22,
               fontWeight: FontWeight.bold,
               color: AppColors.white),
-          titleMedium: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
+          titleMedium: GoogleFonts.poppins(
+            textStyle: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+            ),
           ),
           bodySmall: TextStyle(fontSize: 18, color: AppColors.white)));
 }
