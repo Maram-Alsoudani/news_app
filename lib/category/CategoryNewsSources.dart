@@ -4,20 +4,20 @@ import 'package:provider/provider.dart';
 
 import '../Api/ApiManager.dart';
 import '../ErrorScreen.dart';
-import '../home/tabs/TabWidget.dart';
+import '../home/tabs/SourceTabWidget.dart';
 import '../models/SourceResponse.dart';
 import 'Category.dart';
 
-class CategoryNews extends StatefulWidget {
+class CategoryNewsSources extends StatefulWidget {
   Category category;
 
-  CategoryNews({required this.category});
+  CategoryNewsSources({required this.category});
 
   @override
-  State<CategoryNews> createState() => _CategoryNewsState();
+  State<CategoryNewsSources> createState() => _CategoryNewsSourcesState();
 }
 
-class _CategoryNewsState extends State<CategoryNews> {
+class _CategoryNewsSourcesState extends State<CategoryNewsSources> {
   @override
   Widget build(BuildContext context) {
     var language = Provider.of<LanguageProvider>(context).currentLanguage;
@@ -57,7 +57,7 @@ class _CategoryNewsState extends State<CategoryNews> {
         }
         // success
         var sourceList = snapShot.data!.sources ?? [];
-        return TabWidget(sourcesList: sourceList);
+        return SourceTabWidget(sourcesList: sourceList);
       },
     );
   }

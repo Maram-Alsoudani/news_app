@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/MyAppTheme.dart';
+import 'package:news_app/home/news/NewsItemDetails.dart';
 import 'package:news_app/providers/LanguageProvider.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
       initialRoute: HomeScreen.screenRoute,
       routes: {
         HomeScreen.screenRoute: (context) => HomeScreen(),
+        NewsItemDetails.screenRoute: (context) => NewsItemDetails()
       },
     );
   }

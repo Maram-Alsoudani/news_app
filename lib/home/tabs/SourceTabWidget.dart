@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/home/tabs/TabItem.dart';
+import 'package:news_app/home/tabs/SourceTabItem.dart';
 
 import '../../models/SourceResponse.dart';
 import '../news/NewsWidget.dart';
 
-class TabWidget extends StatefulWidget {
+class SourceTabWidget extends StatefulWidget {
   static const String screenRoute = "tab_widget";
   final List<Source> sourcesList;
 
-  TabWidget({required this.sourcesList});
+  SourceTabWidget({required this.sourcesList});
 
   @override
-  State<TabWidget> createState() => _TabWidgetState();
+  State<SourceTabWidget> createState() => _SourceTabWidgetState();
 }
 
-class _TabWidgetState extends State<TabWidget> {
+class _SourceTabWidgetState extends State<SourceTabWidget> {
   int selectedIndex = 0;
 
   @override
@@ -39,7 +39,7 @@ class _TabWidgetState extends State<TabWidget> {
               dividerColor: Colors.transparent,
               // Removes the underline
               tabs: widget.sourcesList.map((source) {
-                return TabItem(
+                return SourceTabItem(
                   isSelected:
                       selectedIndex == widget.sourcesList.indexOf(source),
                   source: source,
@@ -47,7 +47,12 @@ class _TabWidgetState extends State<TabWidget> {
               }).toList(),
             ),
           ),
-          Expanded(child: NewsWidget(source: widget.sourcesList[selectedIndex]))
+          Expanded(
+            child: NewsWidget(
+              key: ValueKey(widget.sourcesList[selectedIndex].id),
+              source: widget.sourcesList[selectedIndex],
+            ),
+          ),
         ],
       ),
     );
