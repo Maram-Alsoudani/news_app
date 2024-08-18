@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/Api/ApiManager.dart';
+import 'package:news_app/NewsWidget_ViewModel.dart';
 import 'package:news_app/home/news/NewsItem.dart';
 import 'package:news_app/home/news/NewsItemDetails.dart';
+import 'package:provider/provider.dart';
 
 import '../../AppColors.dart';
 import '../../ErrorScreen.dart';
-import '../../models/NewsResponse.dart';
 import '../../models/SourceResponse.dart';
 
 class NewsWidget extends StatefulWidget {
@@ -13,121 +13,81 @@ class NewsWidget extends StatefulWidget {
 
   NewsWidget({required this.source, required ValueKey<String?> key})
       : super(key: key);
-
   @override
   State<NewsWidget> createState() => _NewsWidgetState();
 }
-
 class _NewsWidgetState extends State<NewsWidget> {
   late ScrollController scrollController;
-  List<News> newsList = [];
-  int currentPage = 1;
-  int pageSize = 10;
-  bool isLoading = false;
-  bool hasMore = true;
-  String? errorMessage;
-
+  NewsWidgetViewModel viewModel = NewsWidgetViewModel();
   @override
   void initState() {
     super.initState();
     scrollController = ScrollController();
     scrollController.addListener(scrollListener);
-    fetchNews();
+    viewModel.getNews(widget.source.id ?? "");
   }
-
   @override
   void dispose() {
     scrollController.removeListener(scrollListener);
     scrollController.dispose();
     super.dispose();
   }
-
-  Future<void> fetchNews() async {
-    if (isLoading || !hasMore) return;
-
-    setState(() {
-      isLoading = true;
-    });
-
-    try {
-      var response = await ApiManager.getNewsBySourceId(
-        widget.source.id ?? "",
-        page: currentPage,
-        pageSize: pageSize,
-      );
-
-      if (response.status == "ok") {
-        setState(() {
-          currentPage++;
-          newsList.addAll(response.articles ?? []);
-          hasMore = (response.articles?.length ?? 0) == pageSize;
-        });
-      } else {
-        setState(() {
-          errorMessage = response.message ?? "Unknown error";
-        });
-      }
-    } catch (e) {
-      setState(() {
-        errorMessage = e.toString();
-      });
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
   void scrollListener() {
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {
-      fetchNews();
+      viewModel.getNews(widget.source.id ?? "");
     }
   }
-
   @override
   Widget build(BuildContext context) {
-    if (errorMessage != null) {
-      return Center(
-        child: ErrorScreen(
-          msg: errorMessage!,
-          onClicked: fetchNews,
-        ),
-      );
-    }
-
-    if (isLoading && newsList.isEmpty) {
-      return Center(
-        child: CircularProgressIndicator(
-          color: AppColors.primaryColor,
-        ),
-      );
-    }
-
-    return ListView.builder(
-      physics: BouncingScrollPhysics(),
-      controller: scrollController,
-      itemCount: newsList.length + (hasMore ? 1 : 0),
-      // Add extra item for loading indicator
-      itemBuilder: (context, index) {
-        if (index == newsList.length) {
-          return Center(
-            child: CircularProgressIndicator(
-              color: AppColors.primaryColor,
-            ),
-          );
-        }
-        return InkWell(
-          child: NewsItem(news: newsList[index]),
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              NewsItemDetails.screenRoute,
-              arguments: newsList[index],
+    return ChangeNotifierProvider(
+        create: (context) => viewModel,
+        child: Consumer<NewsWidgetViewModel>(
+          builder: ((context, value, child) {
+            if (viewModel.errorMessage != null) {
+              return Center(
+                child: ErrorScreen(
+                  msg: viewModel.errorMessage!,
+                  onClicked: () {
+                    viewModel.resetPagination();
+                    viewModel.getNews(widget.source.id ?? "");
+                  },
+                ),
+              );
+            }
+            if (viewModel.isLoading && viewModel.newsList.isEmpty) {
+              return Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryColor,
+                ),
+              );
+            }
+            return ListView.builder(
+              physics: BouncingScrollPhysics(),
+              controller: scrollController,
+              itemCount:
+                  viewModel.newsList.length + (viewModel.hasMore ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (index == viewModel.newsList.length) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.primaryColor,
+                    ),
+                  );
+                }
+                return InkWell(
+                  child: NewsItem(news: viewModel.newsList[index]),
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      NewsItemDetails.screenRoute,
+                      arguments: viewModel.newsList[index],
+                    );
+                  },
+                );
+              },
             );
-          },
-        );
-      },
-    );
+          }),
+        ));
   }
 }
