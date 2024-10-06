@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:news_app/MyAppTheme.dart';
 import 'package:news_app/home/news/NewsItemDetails.dart';
+import 'package:news_app/models/SourceResponse.dart';
 import 'package:news_app/providers/LanguageProvider.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'di/di_impl.dart';
 import 'home/HomeScreen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final documentDirectory = await getApplicationDocumentsDirectory();
+  Hive.init(documentDirectory.path);
+  Hive.registerAdapter(SourceResponseAdapter());
+  Hive.registerAdapter(SourceAdapter());
+  configureDependencies();
+
   runApp(ChangeNotifierProvider(
     create: (context) => LanguageProvider(),
     child: MyApp(),
@@ -16,7 +27,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
